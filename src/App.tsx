@@ -1,24 +1,16 @@
-import logo from "./logo.svg";
-import "./App.css";
+import { Container, Paper, Stack, Typography } from "@mui/material";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Container>
+      <Stack justifyContent="space-evenly" height="100vh">
+        <Paper elevation={6} sx={{ padding: "5rem" }}>
+          <Typography variant="h1" textAlign="center">
+            Hello
+          </Typography>
+        </Paper>
+      </Stack>
+    </Container>
   );
 }
 
