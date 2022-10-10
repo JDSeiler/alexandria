@@ -1,5 +1,8 @@
 # Getting Started with Create React App
 
+Sibling project of [Ptolemy](https://github.com/JDSeiler/ptolemy). Development
+is in very early stages in both projects.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
