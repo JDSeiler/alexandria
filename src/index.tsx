@@ -12,16 +12,32 @@ import Layout from "./Layout";
 import Login from "./scenes/login";
 import CreateAccount from "./scenes/create-account";
 import AuthGate from "./components/AuthGate";
+import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
+import { AuthProvider } from "./hooks/auth";
 // import reportWebVitals from "./reportWebVitals";
 
-/*
-K, I need some routes... 
-I'm missing the backend API route for checking if the user is logged in.
-So we're going to skip gluing together for now and just work on the UI
-for now.
-
-Or, I can just mock the backend code....
-*/
+// Created with the help of: https://bareynol.github.io/mui-theme-creator
+// Very useful for previewing how all the colors will look together.
+const customizedTheme = createTheme({
+  palette: {
+    mode: "dark",
+    primary: {
+      main: "#689d6a",
+    },
+    secondary: {
+      main: "#fabd2f",
+    },
+    background: {
+      default: "#282828",
+    },
+    text: {
+      primary: "#ffffff",
+    },
+    warning: {
+      main: "#fe8019",
+    },
+  },
+});
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -40,7 +56,12 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <ThemeProvider theme={customizedTheme}>
+      <CssBaseline />
+      <AuthProvider>
+        <RouterProvider router={router} />
+      </AuthProvider>
+    </ThemeProvider>
   </React.StrictMode>
 );
 
