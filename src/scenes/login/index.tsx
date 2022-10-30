@@ -64,7 +64,6 @@ const Login: FC = () => {
               </InputAdornment>
             ),
           }}
-          sx={{ maxWidth: "33%" }}
         />
         <TextField
           name="password"
@@ -82,7 +81,6 @@ const Login: FC = () => {
               </InputAdornment>
             ),
           }}
-          sx={{ maxWidth: "33%" }}
         />
         <Stack direction="row" spacing={3} justifyContent="space-between">
           <Link

@@ -12,7 +12,7 @@ const AuthGate: FC = () => {
       // navigation is a side-effect, so it goes in useEffect
       navigate("/login");
     }
-  }, [signedIn]);
+  }, [loading, signedIn]);
 
   if (loading) {
     return <Typography>{"AuthGate: Loading!"}</Typography>;
