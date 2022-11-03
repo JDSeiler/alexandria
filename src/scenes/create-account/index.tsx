@@ -3,9 +3,12 @@ import EmailIcon from "@mui/icons-material/Email";
 import Lock from "@mui/icons-material/Lock";
 import PersonOutline from "@mui/icons-material/PersonOutline";
 import {
+  Alert,
+  AlertTitle,
   Button,
   CircularProgress,
   InputAdornment,
+  Snackbar,
   Stack,
   TextField,
   Typography,
@@ -25,7 +28,7 @@ const createAccoutSchema = Yup.object().shape({
       name: "passwords-match",
       message: "Passwords do not match",
       test: function (value) {
-        return value === this.resolve("password");
+        return value === this.parent.password;
       },
     }),
 });
@@ -39,10 +42,11 @@ const CreateAccount: FC = () => {
       confirmPassword: "",
     },
     validationSchema: createAccoutSchema,
-    onSubmit: (values, { setSubmitting }) => {
+    onSubmit: (values, { setSubmitting, resetForm }) => {
       setTimeout(() => {
-        alert("Account created, or something");
+        setShowSuccessFeedback(true);
         setSubmitting(false);
+        resetForm();
       }, 500);
     },
   });
@@ -50,6 +54,7 @@ const CreateAccount: FC = () => {
   // Preemptively adding this for when the API spits back an error that
   // a username/email is already in use.
   const [errorMessage, setErrorMessage] = useState("");
+  const [showSuccessFeedback, setShowSuccessFeedback] = useState(false);
 
   return (
     <form onSubmit={formik.handleSubmit}>
@@ -164,6 +169,20 @@ const CreateAccount: FC = () => {
             "Create Account"
           )}
         </Button>
+        <Snackbar
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          open={showSuccessFeedback}
+          onClose={() => setShowSuccessFeedback(false)}
+        >
+          <Alert
+            severity="info"
+            variant="filled"
+            onClose={() => setShowSuccessFeedback(false)}
+          >
+            <AlertTitle>Additional Action Needed</AlertTitle>
+            Please confirm your email address to complete account setup.
+          </Alert>
+        </Snackbar>
       </Stack>
     </form>
   );
