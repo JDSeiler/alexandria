@@ -6,57 +6,57 @@ import {
   InputAdornment,
   Link,
   Stack,
-  TextField,
   Typography,
   useTheme,
 } from "@mui/material";
-import { useFormik } from "formik";
+import { useForm } from "react-hook-form";
 import { FC, useContext } from "react";
 import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
-import * as Yup from "yup";
 import { AuthContext } from "../../hooks/auth";
+import TextField from "../../components/forms/TextField";
 
-const loginSchema = Yup.object().shape({
-  username: Yup.string().required("Username is required"),
-  password: Yup.string().required("Password is required"),
-});
+type FormContents = {
+  username: string;
+  password: string;
+};
 
 const Login: FC = () => {
   const { setSignedIn } = useContext(AuthContext);
   const navigate = useNavigate();
-  const theme = useTheme();
-  const formik = useFormik({
-    initialValues: {
+  const { control, formState, handleSubmit } = useForm<FormContents>({
+    defaultValues: {
       username: "",
       password: "",
     },
-    validationSchema: loginSchema,
-    onSubmit: (values, { setSubmitting }) => {
+  });
+  const theme = useTheme();
+
+  const onSubmit = (formContents: FormContents) => {
+    return new Promise((resolve) => {
       setTimeout(() => {
         // TODO: Do real sign-in implementation. The basic idea will stay the same.
-        alert("Woohoo! Signed in!");
-        setSubmitting(false);
+        // Redirection to "/" is not working as expected, but I wont bother trying
+        // to fix it unless it breaks in a real implementation.
+        console.log(JSON.stringify(formContents, null, 2));
         setSignedIn(true);
+        resolve(true);
         navigate("/");
-      }, 500);
-    },
-  });
+      }, 1500);
+    });
+  };
 
   return (
-    <form onSubmit={formik.handleSubmit}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={2} alignItems="center" sx={{ marginTop: "15vh" }}>
         <Typography variant="h4" sx={{ paddingBottom: "1rem" }}>
           Sign In
         </Typography>
         <TextField
-          id="username"
           name="username"
+          control={control}
+          id="username"
           label="Username"
           required
-          value={formik.values.username}
-          onChange={formik.handleChange}
-          error={formik.touched.username && Boolean(formik.errors.username)}
-          helperText={formik.touched.username && formik.errors.username}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -67,13 +67,11 @@ const Login: FC = () => {
         />
         <TextField
           name="password"
-          type="password"
+          control={control}
+          id="password"
           label="Password"
+          type="password"
           required
-          value={formik.values.password}
-          onChange={formik.handleChange}
-          error={formik.touched.password && Boolean(formik.errors.password)}
-          helperText={formik.touched.password && formik.errors.password}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -95,10 +93,10 @@ const Login: FC = () => {
           </Link>
           <Button
             variant="contained"
-            disabled={formik.isSubmitting}
-            onClick={formik.submitForm}
+            type="submit"
+            disabled={formState.isSubmitting}
           >
-            {formik.isSubmitting ? (
+            {formState.isSubmitting ? (
               <CircularProgress
                 size={24}
                 sx={{
