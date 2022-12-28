@@ -8,12 +8,17 @@ import {
   Stack,
   Typography,
   useTheme,
+  Snackbar,
+  Alert,
+  AlertTitle,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
-import { FC, useContext } from "react";
+import { FC, useContext, useState } from "react";
 import { Link as ReactRouterLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../hooks/auth";
 import TextField from "../../components/forms/TextField";
+import { login } from "../../services/ptolemy/auth";
+import { useEffect } from "react";
 
 type FormContents = {
   username: string;
@@ -21,7 +26,10 @@ type FormContents = {
 };
 
 const Login: FC = () => {
-  const { setSignedIn } = useContext(AuthContext);
+  const { signedIn, setSignedIn } = useContext(AuthContext);
+  const [error, setError] = useState<{ title: string; body: string } | null>(
+    null
+  );
   const navigate = useNavigate();
   const { control, formState, handleSubmit } = useForm<FormContents>({
     defaultValues: {
@@ -31,18 +39,31 @@ const Login: FC = () => {
   });
   const theme = useTheme();
 
-  const onSubmit = (formContents: FormContents) => {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        // TODO: Do real sign-in implementation. The basic idea will stay the same.
-        // Redirection to "/" is not working as expected, but I wont bother trying
-        // to fix it unless it breaks in a real implementation.
-        console.log(JSON.stringify(formContents, null, 2));
-        setSignedIn(true);
-        resolve(true);
-        navigate("/");
-      }, 1500);
-    });
+  useEffect(() => {
+    if (signedIn) {
+      navigate("/");
+    }
+  }, [signedIn]);
+
+  const onSubmit = async ({ username, password }: FormContents) => {
+    const err = await login(username, password);
+    if (!err) {
+      setSignedIn(true);
+    } else {
+      if (err.kind === "UnverifiedEmail") {
+        setError({
+          title: "Your email address is not verified",
+          body: "Check your inbox, you'll need to verify your email before you can sign in.",
+        });
+      } else if (err.kind === "InvalidCredentials") {
+        setError({
+          title: "Incorrect username or password",
+          body: "The username or password you provided was not recognized, please try again.",
+        });
+      } else {
+        console.error(err);
+      }
+    }
   };
 
   return (
@@ -107,6 +128,24 @@ const Login: FC = () => {
               "Sign In"
             )}
           </Button>
+          <Snackbar
+            anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+            open={error !== null}
+            autoHideDuration={5000}
+            onClose={() => setError(null)}
+            ClickAwayListenerProps={{ mouseEvent: false }}
+          >
+            <Alert
+              severity="error"
+              variant="filled"
+              onClose={() => setError(null)}
+            >
+              <AlertTitle sx={{ fontSize: "1.125rem" }}>
+                {error?.title}
+              </AlertTitle>
+              {error?.body}
+            </Alert>
+          </Snackbar>
         </Stack>
       </Stack>
     </form>
