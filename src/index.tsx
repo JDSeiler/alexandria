@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import Layout from "./Layout";
 import Login from "./scenes/login";
+import VerifyEmail from "./scenes/verify";
 import CreateAccount from "./scenes/create-account";
 import AuthGate from "./components/AuthGate";
 import { createTheme, ThemeProvider, CssBaseline } from "@mui/material";
@@ -44,6 +45,7 @@ const router = createBrowserRouter(
     <Route element={<Layout />}>
       <Route path="/login" element={<Login />} />
       <Route path="/create-account" element={<CreateAccount />} />
+      <Route path="/verify" element={<VerifyEmail />} />
       <Route element={<AuthGate />}>
         <Route path="/" element={<App />} />
       </Route>

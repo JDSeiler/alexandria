@@ -26,7 +26,7 @@ export const createAccount = async (accountDetails: AccountDetails) => {
   const res = await ptolemy("/auth/create", {
     method: "POST",
     headers: {
-      "content-type": "application/json"
+      "content-type": "application/json",
     },
     body: JSON.stringify(accountDetails),
   });
@@ -43,9 +43,23 @@ export const login = async (username: string, password: string) => {
   const res = await ptolemy("/auth/login", {
     method: "POST",
     headers: {
-      "content-type": "application/json"
+      "content-type": "application/json",
     },
     body: JSON.stringify({ username, password }),
   });
   return res.ok ? null : ((await res.json()) as ErrorResponse);
+};
+
+/**
+ * @param email
+ * @param code
+ * @returns Ptolemy's response to the verification request
+ */
+export const verifyEmail = async (
+  email: string,
+  code: string
+): Promise<Response> => {
+  return ptolemy(`/auth/verify?email=${email}&code=${code}`, {
+    method: "POST",
+  });
 };
