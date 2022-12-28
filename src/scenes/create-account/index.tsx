@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import * as Yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import TextField from "../../components/forms/TextField";
+import { createAccount } from "../../services/ptolemy/auth";
 
 const createAccountSchema = Yup.object({
   email: Yup.string().required("Email is required"),
@@ -44,6 +45,7 @@ type FormContents = {
 const CreateAccount: FC = () => {
   const theme = useTheme();
   const [showSuccessFeedback, setShowSuccessFeedback] = useState(false);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
   const { control, formState, handleSubmit, reset } = useForm<FormContents>({
     defaultValues: {
       email: "",
@@ -56,18 +58,21 @@ const CreateAccount: FC = () => {
   });
 
   const onSubmit = useCallback(
-    (formContents: FormContents) => {
+    async ({ email, username, password }: FormContents) => {
       // Ultimately, I will need to read the API response and set the form's
       // error state accordingly. The main case for this is if an email/username
       // is already in use.
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          console.log(JSON.stringify(formContents, null, 2));
-          setShowSuccessFeedback(true);
-          reset();
-          resolve(true);
-        }, 500);
-      });
+      const err = await createAccount({ email, username, password });
+      if (!err) {
+        setShowSuccessFeedback(true);
+        reset();
+      } else {
+        if (err.kind === "DuplicateFields") {
+          setShowErrorMessage(true);
+        } else {
+          console.error(err);
+        }
+      }
     },
     [setShowSuccessFeedback]
   );
@@ -184,6 +189,27 @@ const CreateAccount: FC = () => {
             </AlertTitle>
             You&apos;ll need to confirm your email address before you can sign
             in.
+          </Alert>
+        </Snackbar>
+
+        <Snackbar
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          open={showErrorMessage}
+          // Disables the click away functionality to make it harder to
+          // accidentally dismiss the snackbar. The snackbar can still be
+          // closed with the "X" icon of the `Alert` component.
+          ClickAwayListenerProps={{ mouseEvent: false }}
+        >
+          <Alert
+            severity="error"
+            variant="filled"
+            onClose={() => setShowSuccessFeedback(false)}
+          >
+            <AlertTitle sx={{ fontSize: "1.125rem" }}>
+              Cannot create account
+            </AlertTitle>
+            An account with that username or email address already exists! Try a
+            different username or email.
           </Alert>
         </Snackbar>
       </Stack>
