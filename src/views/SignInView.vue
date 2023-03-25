@@ -11,6 +11,7 @@ const form = reactive({
 const errorMessage = ref<string | null>(null)
 const store = useAuthStore()
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 async function handleSubmit(_e: Event) {
   errorMessage.value = null;
   const authResult = await login(form.username, form.password);
@@ -47,6 +48,7 @@ async function handleSubmit(_e: Event) {
   </form>
 </template>
 
+<!-- TODO: Figure out how to share these styles better / componentize things -->
 <style scoped>
 .stack {
   display: flex;
