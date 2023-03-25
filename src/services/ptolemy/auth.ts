@@ -1,65 +1,31 @@
-import { redirect } from "react-router-dom";
-import ptolemy, { ErrorResponse } from "./base";
+import type { PtolemyError, PtolemyInfo, PtolemyOk } from './common'
+import ptolemy from './common'
 
-export type AccountDetails = {
-  email: string;
-  username: string;
-  password: string;
-};
+export interface AccountDetails {
+  email: string
+  username: string
+  password: string
+}
 
-export const checkAuthState = async () => {
-  // TODO: Hook this up to my backend. I don't have the
-  // necessary backend endpoint yet.
-  const sessionIsValid = true;
-  if (!sessionIsValid) {
-    return redirect("/login");
-  }
-  return sessionIsValid;
-};
-
-/**
- * @param accountDetails the account to create
- * @returns resolves to null if account creation was successful, otherwise the
- * error response is returned
- */
 export const createAccount = async (accountDetails: AccountDetails) => {
-  const res = await ptolemy("/auth/create", {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-    },
-    body: JSON.stringify(accountDetails),
-  });
-  return res.ok ? null : ((await res.json()) as ErrorResponse);
-};
+  const res = await ptolemy.post('/auth/create', accountDetails)
+  const content = await res.json()
 
-/**
- * @param username
- * @param password
- * @returns resolves to null if login was successful, otherwise the
- * error response is returned
- */
+  return res.ok ? ({ kind: 'ok', info: content } as PtolemyOk) : (content as PtolemyError)
+}
+
+export const verifyEmail = async (email: string, code: string) => {
+  const res = await ptolemy.r(`/auth/verify?email=${email}&code=${code}`, { credentials: 'include', method: 'POST' })
+
+  return res.ok ? ({ kind: 'ok' }) : ({ kind: 'err', info: await res.json() as PtolemyInfo })
+}
+
 export const login = async (username: string, password: string) => {
-  const res = await ptolemy("/auth/login", {
-    method: "POST",
-    headers: {
-      "content-type": "application/json",
-    },
-    body: JSON.stringify({ username, password }),
-  });
-  return res.ok ? null : ((await res.json()) as ErrorResponse);
-};
+  const res = await ptolemy.post('/auth/login', { username, password })
+  const content = await res.json()
 
-/**
- * @param email
- * @param code
- * @returns Ptolemy's response to the verification request
- */
-export const verifyEmail = async (
-  email: string,
-  code: string
-): Promise<Response> => {
-  return ptolemy(`/auth/verify?email=${email}&code=${code}`, {
-    method: "POST",
-  });
-};
+  return res.ok ? ({ kind: 'ok', info: content } as PtolemyOk) : (content as PtolemyError)
+}
+
+// TODO: Some kind of automatic check to see if our session cookie is valid.
+// Use the heartbeat endpoint I added recently

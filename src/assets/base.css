@@ -1,0 +1,44 @@
+/* color palette from <https://github.com/vuejs/theme> */
+:root {
+  --alx-black: #000;
+  --alx-white: #fff;
+  
+  --alx-bg: #222020;
+  --alx-bg-light: #353131;
+  --alx-bg-lighter: #403b3b;
+  --alx-text-primary: #f7f4eb;
+
+  --alx-primary: #507d4f;
+  --alx-primary-dark: #324f31;
+  --alx-primary-light: #6aa168;
+
+  --alx-accent: #ff580a;
+  --alx-accent-dark: #cc4100;
+  --alx-accent-light: #ff8247;
+
+  --alx-messaging-error: #a52f2f;
+  --alx-messaging-error-dark: #7f2424;
+  --alx-messaging-error-light: #ce5050;
+  --alx-messaging-error-bg: #401212;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  position: relative;
+  font-weight: normal;
+}
+
+body {
+  min-height: 100vh;
+  color: var(--alx-text-primary);
+  background: var(--alx-bg);
+  line-height: 1.6;
+  font-family: Ubuntu, Cantarell, 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  font-size: 15px;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}

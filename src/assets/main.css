@@ -1,0 +1,21 @@
+@import './base.css';
+
+#app {
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 2rem;
+
+  font-weight: normal;
+}
+
+a {
+  text-decoration: none;
+  color: var(--alx-primary);
+  transition: 0.4s;
+}
+
+@media (hover: hover) {
+  a:hover {
+    color: var(--alx-primary-light)
+  }
+}
