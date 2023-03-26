@@ -4,6 +4,10 @@ import { RouterLink } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
 import router from '@/router'
 import { login } from '@/services/ptolemy/auth';
+
+import TextInput from '@/components/TextInput.vue';
+import SubmitInput from '@/components/SubmitInput.vue';
+
 const form = reactive({
   username: '',
   password: '',
@@ -35,20 +39,19 @@ async function handleSubmit(_e: Event) {
       </div>
 
       <label for="username">Username*</label>
-      <input id="username" type="text" required v-model.trim="form.username" />
+      <TextInput id="username" type="text" required v-model.trim="form.username" />
 
       <label for="password">Password*</label>
-      <input id="password" type="password" required v-model.trim="form.password" />
+      <TextInput id="password" type="password" required v-model.trim="form.password" />
 
       <div class="action-group">
         <RouterLink tabindex="0" to="/create-account">Create Account</RouterLink>
-        <input type="submit" value="Sign In" />
+        <SubmitInput value="Sign In" />
       </div>
     </div>
   </form>
 </template>
 
-<!-- TODO: Figure out how to share these styles better / componentize things -->
 <style scoped>
 .stack {
   display: flex;
@@ -70,41 +73,5 @@ async function handleSubmit(_e: Event) {
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-}
-
-input[type='text'],
-input[type='password'] {
-  height: 2rem;
-  font-size: 1rem;
-
-  color: var(--alx-text-primary);
-  background-color: var(--alx-bg-light);
-  border: none;
-  border-bottom: 1px solid var(--alx-text-primary);
-  border-radius: 2px;
-
-  padding: 0.25rem;
-  transition: background-color ease 0.25s;
-}
-
-input[type='text']:focus,
-input[type='password']:focus {
-  background-color: var(--alx-bg-lighter);
-  outline: 1px solid var(--alx-accent-dark);
-}
-
-input[type='submit'] {
-  border: none;
-  border-radius: 2px;
-  font-size: 1rem;
-  padding: 0.5rem;
-  color: var(--alx-text-primary);
-  background-color: var(--alx-primary);
-  transition: background-color ease 0.25s;
-}
-
-input[type='submit']:hover {
-  cursor: pointer;
-  background-color: var(--alx-primary-light);
 }
 </style>
