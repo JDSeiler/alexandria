@@ -1,6 +1,9 @@
 <script setup lang="ts">
   import { reactive, ref } from 'vue'
   import { createAccount } from '@/services/ptolemy/auth';
+  import TextInput from '@/components/TextInput.vue';
+  import SubmitInput from '@/components/SubmitInput.vue';
+
   const form = reactive({
     username: '',
     email: '',
@@ -48,7 +51,7 @@
 </script>
 
 <template>
-  <RouterLink to="/login">Back to Login</RouterLink>
+  <RouterLink to="/sign-in">Back to Sign In</RouterLink>
   <h1>Create Account</h1>
   <form @submit.prevent="handleSubmit">
     <div class="stack">
@@ -61,18 +64,18 @@
       </div>
 
       <label for="email">Email*</label>
-      <input id="email" type="email" required v-model.trim="form.email" />
+      <TextInput id="email" type="email" required v-model.trim="form.email" />
 
       <label for="username">Username*</label>
-      <input id="username" type="text" required v-model.trim="form.username" />
+      <TextInput id="username" type="text" required v-model.trim="form.username" />
 
       <label for="password">Password*</label>
-      <input id="password" type="password" required v-model.trim="form.password" />
+      <TextInput id="password" type="password" required v-model.trim="form.password" />
 
       <label for="confirm-password">Confirm Password*</label>
-      <input id="confirm-password" type="password" required v-model.trim="form.confirmPassword" />
+      <TextInput id="confirm-password" type="password" required v-model.trim="form.confirmPassword" />
 
-      <input type="submit" value="Create Account">
+      <SubmitInput value="Create Account" />
     </div>
   </form>
 </template>
@@ -106,43 +109,5 @@
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-}
-
-input[type='text'],
-input[type='email'],
-input[type='password'] {
-  height: 2rem;
-  font-size: 1rem;
-
-  color: var(--alx-text-primary);
-  background-color: var(--alx-bg-light);
-  border: none;
-  border-bottom: 1px solid var(--alx-text-primary);
-  border-radius: 2px;
-
-  padding: 0.25rem;
-  transition: background-color ease 0.25s;
-}
-
-input[type='text']:focus,
-input[type='email']:focus,
-input[type='password']:focus {
-  background-color: var(--alx-bg-lighter);
-  outline: 1px solid var(--alx-accent-dark);
-}
-
-input[type='submit'] {
-  border: none;
-  border-radius: 2px;
-  font-size: 1rem;
-  padding: 0.5rem;
-  color: var(--alx-text-primary);
-  background-color: var(--alx-primary);
-  transition: background-color ease 0.25s;
-}
-
-input[type='submit']:hover {
-  cursor: pointer;
-  background-color: var(--alx-primary-light);
 }
 </style>
