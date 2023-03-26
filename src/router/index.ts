@@ -4,6 +4,7 @@ const Home = () => import('@/views/HomeView.vue');
 const SignIn = () => import('@/views/SignInView.vue');
 const CreateAccount = () => import('@/views/CreateAccountView.vue');
 const Verify = () => import('@/views/VerifyView.vue');
+const Dashboard = () => import('@/views/DashboardView.vue')
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function authGuard(to: RouteLocationNormalized, _from: RouteLocationNormalized) {
@@ -37,6 +38,11 @@ const router = createRouter({
       path: '/verify',
       name: 'verify',
       component: Verify
+    },
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      component: Dashboard
     }
   ]
 })
